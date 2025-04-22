@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="../static/style.css">
+  <title>Grade Journal</title>
+</head>
+<body onload="fetchData()">
+
+  <h1>Talabalar baholash jurnali</h1>
+
+  <div class="controls">
+    <input type="text" id="new-student" placeholder="Yangi talaba">
+    <button onclick="addStudent()">Talaba qo‘shish</button>
+
+    <input type="text" id="new-subject" placeholder="Yangi fan">
+    <button onclick="addSubject()">Fan qo‘shish</button>
+  </div>
+
+  <div class="controls">
+    <select id="filter-subject">
+      <option value="">Fan tanlang</option>
+    </select>
+    <label><input type="radio" name="grade-filter" value="high"> High</label>
+    <label><input type="radio" name="grade-filter" value="medium"> Medium</label>
+    <label><input type="radio" name="grade-filter" value="low"> Low</label>
+    <button onclick="applyFilter()">Filter</button>
+    <button onclick="clearFilter()">Filterni tozalash</button>
+  </div>
+
+  <table>
+    <thead id="table-head"></thead>
+    <tbody id="table-body"></tbody>
+    <tfoot id="table-foot"></tfoot>
+  </table>
+
+  <script src="../static/script.js"></script>
+</body>
+</html>
