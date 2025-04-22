@@ -2,9 +2,9 @@ let students = [], subjects = [], grades = [];
 
 async function fetchData() {
   const [studentsRes, subjectsRes, gradesRes] = await Promise.all([
-    fetch("http://localhost:8080/students/"),
-    fetch("http://localhost:8080/subjects/"),
-    fetch("http://localhost:8080/grades/"),
+    fetch("http://13.40.123.211:8080/students/"),
+    fetch("http://13.40.123.211:8080/subjects/"),
+    fetch("http://13.40.123.211:8080/grades/"),
   ]);
   students = await studentsRes.json();
   subjects = await subjectsRes.json();
@@ -28,7 +28,7 @@ function populateSubjectFilter() {
 async function addStudent() {
   const name = document.getElementById('new-student').value;
   if (!name) return;
-  await fetch("http://localhost:8080/students/", {
+  await fetch("http://13.40.123.211:8080/students/", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name })
@@ -40,7 +40,7 @@ async function addStudent() {
 async function addSubject() {
   const name = document.getElementById('new-subject').value;
   if (!name) return;
-  await fetch("http://localhost:8080/subjects/", {
+  await fetch("http://13.40.123.211:8080/subjects/", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name })
@@ -50,7 +50,7 @@ async function addSubject() {
 }
 
 async function updateGrade(studentId, subjectId, score) {
-  await fetch("http://localhost:8080/grades/", {
+  await fetch("http://13.40.123.211:8080/grades/", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ student_id: studentId, subject_id: subjectId, score })
