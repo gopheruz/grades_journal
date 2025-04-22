@@ -11,11 +11,11 @@ from sqladmin import Admin, ModelView
 from sqladmin.authentication import AuthenticationBackend
 from starlette.responses import RedirectResponse
 
-# Database Configuration
-DATABASE_URL = "postgresql://postgres:postgrespswd@localhost:5432/gradejournal"
+# Database Configuration (SQLite)
+DATABASE_URL = "sqlite:///gradejournal.db"
 
 # SQLAlchemy Setup
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
