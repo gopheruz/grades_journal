@@ -9,33 +9,26 @@ from sqlalchemy.orm import sessionmaker, relationship
 from pydantic import BaseModel
 from sqladmin import Admin, ModelView
 from sqladmin.authentication import AuthenticationBackend
-from starlette.responses import RedirectResponse
 
-# Database Configuration (SQLite)
 DATABASE_URL = "sqlite:///gradejournal.db"
 
-# SQLAlchemy Setup
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-# FastAPI App
 app = FastAPI()
 
-# Add CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins (restrict in production)
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Mount Static Files and Templates
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-# Define SQLAlchemy Models
 class Student(Base):
     __tablename__ = "students"
     id = Column(Integer, primary_key=True, index=True)
@@ -56,10 +49,8 @@ class Grade(Base):
     student = relationship("Student")
     subject = relationship("Subject")
 
-# Create tables in database
 Base.metadata.create_all(bind=engine)
 
-# Pydantic Schemas for CRUD
 class StudentCreate(BaseModel):
     name: str
 
@@ -71,7 +62,6 @@ class GradeCreate(BaseModel):
     subject_id: int
     score: int
 
-# FastAPI Routes for Students, Subjects, and Grades
 @app.post("/students")
 def create_student(student: StudentCreate):
     db = SessionLocal()
@@ -150,7 +140,6 @@ def get_grades():
     db.close()
     return grades
 
-# Admin Panel Authentication Backend
 class AdminAuth(AuthenticationBackend):
     async def login(self, request: Request) -> bool:
         form = await request.form()
@@ -170,7 +159,6 @@ class AdminAuth(AuthenticationBackend):
             return True
         return False
 
-# Admin Panel Models
 class StudentAdmin(ModelView, model=Student):
     column_list = [Student.id, Student.name]
     name = "Student"
@@ -189,13 +177,11 @@ class GradeAdmin(ModelView, model=Grade):
     name_plural = "Grades"
     icon = "fa fa-star"
 
-# Admin Panel Integration with Authentication
 admin = Admin(app=app, engine=engine, authentication_backend=AdminAuth("Nurmuhammad"))
 admin.add_view(StudentAdmin)
 admin.add_view(SubjectAdmin)
 admin.add_view(GradeAdmin)
 
-# Serve Frontend
 @app.get("/", response_class=HTMLResponse)
 async def serve_frontend(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})

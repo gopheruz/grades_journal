@@ -1,17 +1,50 @@
 let students = [], subjects = [], grades = [];
 
 async function fetchData() {
-  const [studentsRes, subjectsRes, gradesRes] = await Promise.all([
-    fetch("http://18.171.185.48:8080/students/"),
-    fetch("http://18.171.185.48:8080/subjects/"),
-    fetch("http://18.171.185.48:8080/grades/"),
-  ]);
-  students = await studentsRes.json();
-  subjects = await subjectsRes.json();
-  grades = await gradesRes.json();
+  try {
+    students = await fetchStudents();
+    subjects = await fetchSubjects();
+    grades = await fetchGrades();
 
-  populateSubjectFilter();
-  renderTable();
+    populateSubjectFilter();
+    renderTable();
+  } catch (error) {
+    showError("Internetga ulanishda yoki ma'lumot olishda xatolik");
+    console.error("fetchData error:", error);
+  }
+}
+
+async function fetchStudents() {
+  try {
+    const res = await fetch("http://localhost:8000/students/");
+    if (!res.ok) throw new Error("Talabalarni yuklab bo‘lmadi");
+    return await res.json();
+  } catch (err) {
+    showError("Talabalar ma'lumotlarini olishda xatolik: " + err.message);
+    throw err;
+  }
+}
+
+async function fetchSubjects() {
+  try {
+    const res = await fetch("http://localhost:8000/subjects/");
+    if (!res.ok) throw new Error("Fanlarni yuklab bo‘lmadi");
+    return await res.json();
+  } catch (err) {
+    showError("Fanlar ma'lumotlarini olishda xatolik: " + err.message);
+    throw err;
+  }
+}
+
+async function fetchGrades() {
+  try {
+    const res = await fetch("http://localhost:8000/grades/");
+    if (!res.ok) throw new Error("Baholarni yuklab bo‘lmadi");
+    return await res.json();
+  } catch (err) {
+    showError("Baholar ma'lumotlarini olishda xatolik: " + err.message);
+    throw err;
+  }
 }
 
 function populateSubjectFilter() {
@@ -28,34 +61,46 @@ function populateSubjectFilter() {
 async function addStudent() {
   const name = document.getElementById('new-student').value;
   if (!name) return;
-  await fetch("http://18.171.185.48:8080/students/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name })
-  });
-  document.getElementById('new-student').value = '';
-  fetchData();
+  try {
+    await fetch("http://localhost:8000/students/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name })
+    });
+    document.getElementById('new-student').value = '';
+    fetchData();
+  } catch (err) {
+    showError("Talaba qo‘shishda xatolik: " + err.message);
+  }
 }
 
 async function addSubject() {
   const name = document.getElementById('new-subject').value;
   if (!name) return;
-  await fetch("http://18.171.185.48:8080/subjects/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name })
-  });
-  document.getElementById('new-subject').value = '';
-  fetchData();
+  try {
+    await fetch("http://localhost:8000/subjects/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name })
+    });
+    document.getElementById('new-subject').value = '';
+    fetchData();
+  } catch (err) {
+    showError("Fan qo‘shishda xatolik: " + err.message);
+  }
 }
 
 async function updateGrade(studentId, subjectId, score) {
-  await fetch("http://18.171.185.48:8080/grades/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ student_id: studentId, subject_id: subjectId, score })
-  });
-  fetchData();
+  try {
+    await fetch("http://localhost:8000/grades/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ student_id: studentId, subject_id: subjectId, score })
+    });
+    fetchData();
+  } catch (err) {
+    showError("Baho yangilashda xatolik: " + err.message);
+  }
 }
 
 function getColor(score) {
@@ -165,3 +210,10 @@ function renderTable(applyFiltering = false) {
   foot.appendChild(avgRow);
   foot.appendChild(minRow);
 }
+
+
+function showError(message) {
+  const errorBox = document.getElementById("error-box");
+  errorBox.textContent = message;
+}
+
