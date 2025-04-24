@@ -16,7 +16,7 @@ async function fetchData() {
 
 async function fetchStudents() {
   try {
-    const res = await fetch("http://http://18.171.185.48:8080//students/");
+    const res = await fetch("http://http://146.190.67.159:8080//students/");
     if (!res.ok) throw new Error("Talabalarni yuklab bo‘lmadi");
     return await res.json();
   } catch (err) {
@@ -27,7 +27,7 @@ async function fetchStudents() {
 
 async function fetchSubjects() {
   try {
-    const res = await fetch("http://http://18.171.185.48:8080//subjects/");
+    const res = await fetch("http://http://146.190.67.159:8080//subjects/");
     if (!res.ok) throw new Error("Fanlarni yuklab bo‘lmadi");
     return await res.json();
   } catch (err) {
@@ -38,7 +38,7 @@ async function fetchSubjects() {
 
 async function fetchGrades() {
   try {
-    const res = await fetch("http://http://18.171.185.48:8080//grades/");
+    const res = await fetch("http://http://146.190.67.159:8080//grades/");
     if (!res.ok) throw new Error("Baholarni yuklab bo‘lmadi");
     return await res.json();
   } catch (err) {
@@ -62,7 +62,7 @@ async function addStudent() {
   const name = document.getElementById('new-student').value;
   if (!name) return;
   try {
-    await fetch("http://http://18.171.185.48:8080//students/", {
+    await fetch("http://http://146.190.67.159:8080//students/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name })
@@ -78,7 +78,7 @@ async function addSubject() {
   const name = document.getElementById('new-subject').value;
   if (!name) return;
   try {
-    await fetch("http://http://18.171.185.48:8080//subjects/", {
+    await fetch("http://http://146.190.67.159:8080//subjects/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name })
@@ -92,7 +92,7 @@ async function addSubject() {
 
 async function updateGrade(studentId, subjectId, score) {
   try {
-    await fetch("http://http://18.171.185.48:8080//grades/", {
+    await fetch("http://http://146.190.67.159:8080//grades/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ student_id: studentId, subject_id: subjectId, score })
