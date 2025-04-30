@@ -1,0 +1,4 @@
+gradesjournal.db
+.venv/
+.gitignore
+.dockerignore

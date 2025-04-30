@@ -181,7 +181,7 @@ admin = Admin(app=app, engine=engine, authentication_backend=AdminAuth("Nurmuham
 admin.add_view(StudentAdmin)
 admin.add_view(SubjectAdmin)
 admin.add_view(GradeAdmin)
-
+        
 @app.get("/", response_class=HTMLResponse)
 async def serve_frontend(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
